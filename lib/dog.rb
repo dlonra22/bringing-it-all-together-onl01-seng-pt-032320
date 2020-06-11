@@ -68,7 +68,6 @@ class Dog
         doghash = {name: => name, breed: => breed}
         self.create(doghash)
       end
-        
   end
     
     
