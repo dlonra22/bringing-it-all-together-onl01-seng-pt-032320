@@ -56,7 +56,37 @@ class Dog
       end.first
     end
     
-  def self.find_or_create_by
+  def self.find_or_create_by(name:,breed:)
+      sql = <<-SQL
+            SELECT * FROM dogs 
+            WHERE name = ? AND breed = ?
+            SQL
+      dogfound = DB[:conn].execute(sql,name,breed)[0]
+      if (dogfound != nil && dogfound != [])
+        newdog = Dog.new_from_db(dogfound)
+      else 
+        doghash = {name: name, breed: breed}
+        self.create(doghash)
+      end
+  end
+  
+  def self.find_by_name(name)
+    sql = <<-SQL
+            SELECT * FROM dogs 
+            WHERE name = ?
+            LIMIT 1
+            SQL
+      dogfound = DB[:conn].execute(sql,name)[0]
+      self.new_from_db(dogfound)
+  end
+  
+  def update
+    sql = <<-SQL
+          UPDATE dogs 
+          SET name = ?, breed =?
+          WHERE id = ?
+          SQL
+    DB[:conn].execute(sql, self.name, self.breed, self.id)
   end
     
     
