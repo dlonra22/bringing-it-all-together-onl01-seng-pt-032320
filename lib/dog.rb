@@ -62,7 +62,7 @@ class Dog
             WHERE name = ? AND breed = ?
             SQL
       dogfound = DB[:conn].execute(sql,name,breed)[0]
-      if dogfound != nil
+      if (dogfound != nil && dogfound != [])
         newdog = Dog.new_from_db(dogfound)
       else 
         doghash = {name: name, breed: breed}
